@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GAJA CUP registracija</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<style>
+:root{--g:#1d3a22;--g2:#2f5a35;--g3:#e8efe8;--ink:#1a1a1a;--mut:#5d665e;--line:#d6ddd6;--bg:#f6f8f5;--card:#fff;--err:#b3261e}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--g:#9fd0a6;--g2:#6fae78;--g3:#1f2e21;--ink:#e8ece8;--mut:#a3ada4;--line:#334034;--bg:#121613;--card:#1a201b;--err:#ff8a80}}
+:root[data-theme="dark"]{--g:#9fd0a6;--g2:#6fae78;--g3:#1f2e21;--ink:#e8ece8;--mut:#a3ada4;--line:#334034;--bg:#121613;--card:#1a201b;--err:#ff8a80}
+header{--hg1:#1d3a22;--hg2:#2f5a35}
+input[type=text],input[type=email],select{background:var(--card)!important}
+.btn.pri{color:var(--card)!important}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+header{background:linear-gradient(90deg,var(--hg1) 0%,var(--hg2) 100%);color:#fff;padding:28px 16px 32px}
+.wrap{max-width:760px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-weight:800;letter-spacing:.04em;font-size:13px;opacity:.85}
+.lang{display:flex;border:1px solid rgba(255,255,255,.5);border-radius:999px;overflow:hidden}
+.lang button{background:none;border:0;color:#fff;padding:6px 14px;font:600 13px Inter,sans-serif;cursor:pointer}
+.lang button.on{background:#fff;color:#1d3a22}
+h1{font-size:clamp(28px,6vw,42px);margin:18px 0 4px;font-weight:800;letter-spacing:-.01em}
+.sub{opacity:.9;margin:0}
+main{padding:24px 16px 48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:18px}
+h2{font-size:17px;margin:0 0 14px;color:var(--g)}
+h3{font-size:15px;margin:18px 0 10px;color:var(--g)}
+.phead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.phead h2{margin:0}
+.rm{background:none;border:1px solid var(--line);border-radius:8px;color:var(--err);font:600 13px Inter,sans-serif;padding:6px 10px;cursor:pointer}
+label.f{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+input[type=text],input[type=email],select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font:16px Inter,sans-serif;background:#fff;color:var(--ink)}
+input:focus,select:focus{outline:2px solid var(--g2);border-color:transparent}
+.hint{font-size:13px;color:var(--mut);margin:6px 0 0}
+.err{color:var(--err);font-size:13px;margin:6px 0 0;display:none}
+.err.show{display:block}
+.field{margin-bottom:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.two{grid-template-columns:1fr}}
+.day{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px}
+.day.on{border-color:var(--g2);background:var(--g3)}
+.dayhead{display:flex;align-items:center;gap:10px;font-weight:700;cursor:pointer}
+.dayhead input{width:20px;height:20px;accent-color:var(--g)}
+.groups{display:none;margin:12px 0 0 30px;gap:8px;flex-direction:column}
+.day.on .groups{display:flex}
+.opt{display:flex;align-items:flex-start;gap:10px;font-size:15px;cursor:pointer}
+.opt input{margin-top:3px;accent-color:var(--g)}
+.tag{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:#b3261e;border-radius:4px;padding:1px 6px;margin-left:4px;vertical-align:1px}
+.price{color:var(--mut);font-size:13px}
+.add{width:100%;padding:16px;border:2px dashed var(--g2);background:transparent;color:var(--g);border-radius:14px;font:700 16px Inter,sans-serif;cursor:pointer;margin-bottom:18px}
+.add:hover{background:var(--g3)}
+.sum{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:15px;padding:5px 0}
+.sum.who{font-weight:700;margin-top:10px;color:var(--g)}
+.sum.total{border-top:1px solid var(--line);margin-top:10px;padding-top:12px;font-weight:800;font-size:20px}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+.btn{flex:1 1 200px;padding:14px 18px;border-radius:10px;border:0;font:700 16px Inter,sans-serif;cursor:pointer}
+.btn.pri{background:var(--g);color:#fff}
+.btn.sec{background:#fff;color:var(--g);border:2px solid var(--g)}
+#pay{display:none}
+.row{display:flex;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:15px;align-items:center}
+.row>span{flex:none;width:96px;color:var(--mut);font-size:13px}
+.row b{flex:1;overflow-wrap:anywhere}
+.copy{background:var(--g3);border:0;border-radius:6px;padding:4px 10px;font:600 12px Inter,sans-serif;color:var(--g);cursor:pointer;flex:none}
+.payflex{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start}
+.payflex>div:first-child{flex:1 1 300px}
+#qr{padding:10px;background:#fff;border:1px solid var(--line);border-radius:10px;display:inline-block}
+.note{font-size:13px;color:var(--mut)}
+footer{text-align:center;font-size:13px;color:var(--mut);padding:0 16px 32px}
+footer a{color:var(--g2)}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="top"><span class="brand">KAUNAS · GAJA CUP</span>
+    <div class="lang"><button data-l="lt" class="on">LT</button><button data-l="en">EN</button></div></div>
+  <h1>GAJA CUP 2027</h1>
+  <p class="sub" data-t="sub"></p>
+</div></header>
+
+<main class="wrap">
+  <div id="players"></div>
+  <button class="add" id="bAdd" type="button" data-t="add"></button>
+
+  <section class="card">
+    <h2 data-t="h_payer"></h2>
+    <p class="hint" style="margin:-8px 0 14px" data-t="payer_hint"></p>
+    <div class="field">
+      <label class="f" for="payName" data-t="payName"></label>
+      <input type="text" id="payName" autocomplete="name">
+      <p class="err" id="e_pay" data-t="e_pay"></p>
+    </div>
+    <div class="two">
+      <div class="field"><label class="f" for="payCode" data-t="payCode"></label><input type="text" id="payCode"></div>
+      <div class="field"><label class="f" for="payEmail" data-t="payEmail"></label><input type="email" id="payEmail" autocomplete="email"></div>
+    </div>
+    <div class="field" style="margin:0"><label class="f" for="payAddr" data-t="payAddr"></label><input type="text" id="payAddr" autocomplete="street-address"></div>
+  </section>
+
+  <section class="card">
+    <h2 data-t="h_sum"></h2>
+    <div id="lines"></div>
+    <div class="sum total"><span data-t="total"></span><span id="total">0,00 €</span></div>
+    <p class="note" id="lateNote" style="display:none" data-t="late"></p>
+    <div class="btns">
+      <button class="btn sec" id="bPdf" type="button" data-t="b_pdf"></button>
+      <button class="btn pri" id="bPay" type="button" data-t="b_pay"></button>
+    </div>
+  </section>
+
+  <section class="card" id="pay">
+    <h2 data-t="h_pay"></h2>
+    <div class="payflex">
+      <div id="payRows"></div>
+      <div><div id="qr"></div><p class="note" style="max-width:180px" data-t="qr_hint"></p></div>
+    </div>
+    <p class="note" data-t="pay_note"></p>
+  </section>
+</main>
+<footer><span data-t="foot"></span> <a href="mailto:staloteniso.lyga@gmail.com">staloteniso.lyga@gmail.com</a></footer>
+
+<script>
+/* ===== NUSTATYMAI. Kai bus 2027 m. nuostatai, keisti tik čia. ===== */
+const CONFIG = {
+  year: 2027,
+  venue: 'Kauno sporto halė, Perkūno al. 5, Kaunas',
+  dates: { fri: '', sat: '', sun: '' },   // pvz. '04-16'
+  lateAfter: '',                          // pvz. '2027-04-11T12:00:00+03:00'; tuščia = netaikoma
+  bundle:     { 2: 35, 3: 45 },
+  bundleLate: { 2: 40, 3: 60 },
+  // Apgyvendinimas pagal LT nuostatus: kaina asmeniui už naktį, su pusryčiais.
+  hotel: 'ibis Kaunas Centre',
+  rooms: { double: 70, single: 95 },
+  maxNights: 4,
+  payUrl: '',                             // mokėjimo kortele nuoroda (Paysera ir pan.)
+  seller: {
+    name: 'VšĮ Stalo teniso lyga', code: '305719077',
+    address: 'Mokslo g. 65A, Mastaičių k., Kauno r.',
+    iban: 'LT074010051005530822', phone: '+370 656 44773', email: 'staloteniso.lyga@gmail.com'
+  }
+};
+const DAYS = [
+  { id:'fri', groups:[
+    { id:'U11B', age:'U11', born:2015, sex:'B', fee:15, late:20 },
+    { id:'U11G', age:'U11', born:2015, sex:'G', fee:15, late:20 },
+    { id:'U15B', age:'U15', born:2011, sex:'B', fee:20, late:25, ittf:true },
+    { id:'U15G', age:'U15', born:2011, sex:'G', fee:20, late:25, ittf:true } ]},
+  { id:'sat', groups:[
+    { id:'U13B', age:'U13', born:2013, sex:'B', fee:20, late:25, ittf:true },
+    { id:'U13G', age:'U13', born:2013, sex:'G', fee:20, late:25, ittf:true },
+    { id:'U17B', age:'U17', born:2009, sex:'B', fee:20, late:25 },
+    { id:'U17G', age:'U17', born:2009, sex:'G', fee:20, late:25 } ]},
+  { id:'sun', groups:[
+    { id:'OPW', age:'OPEN', sex:'W', fee:25, late:30 },
+    { id:'OPM', age:'OPEN', sex:'M', fee:25, late:30 } ]}
+];
+
+const T = {
+ lt:{ sub:'Tarptautinis stalo teniso turnyras · Registracija', player:n=>`Žaidėjas ${n}`, remove:'Pašalinti',
+  add:'+ Pridėti žaidėją', name:'Vardas ir pavardė', e_name:'Įrašykite vardą ir pavardę.',
+  h_days:'Dienos ir grupės', days_hint:'Vieną dieną galima žaisti tik vienoje grupėje.',
+  e_days:'Pasirinkite bent vieną dieną ir kiekvienai dienai grupę.', ittf:'ITTF ID numeris',
+  ittf_hint:'Privaloma U13 ir U15 grupėse. Dėl numerio kreiptis gajacup@stalotenisas.lt.',
+  e_ittf:'Įrašykite ITTF ID numerį (tik skaičiai).',
+  h_room:'Apgyvendinimas', room:'Kambarys', nights:'Naktų skaičius',
+  r_none:'Nereikia', r_double:'Dvivietis kambarys', r_single:'Vienvietis kambarys',
+  room_hint:h=>`Viešbutis ${h}, su pusryčiais. Kaina asmeniui už naktį. Pasitikimo informacija bus pateikta po registracijos.`,
+  perNight:'/ naktis',
+  h_payer:'Mokėtojas', payer_hint:'Kas moka už registraciją: tėvai, treneris, klubas ar pats žaidėjas. Šie duomenys bus sąskaitoje.',
+  payName:'Vardas, pavardė arba įmonės (klubo) pavadinimas', e_pay:'Įrašykite mokėtoją.',
+  payCode:'Įmonės kodas (jei moka įmonė)', payEmail:'El. paštas', payAddr:'Adresas',
+  h_sum:'Mokėti', total:'Iš viso', late:'Taikomas vėlyvosios registracijos mokestis.',
+  b_pdf:'Parsisiųsti sąskaitą (PDF)', b_pay:'Apmokėti',
+  h_pay:'Apmokėjimas bankiniu pavedimu', qr_hint:'Nuskenuokite banko programėle', copy:'Kopijuoti', copied:'Nukopijuota',
+  pay_note:'Registracija patvirtinama gavus apmokėjimą. Po to žaidėjai įtraukiami į dalyvių sąrašą rezultatai.stalotenisas.lt.',
+  foot:'Klausimai ir sąskaitos faktūros:',
+  fri:'Penktadienis', sat:'Šeštadienis', sun:'Sekmadienis', B:'berniukai', G:'mergaitės', W:'moterys', M:'vyrai',
+  bornAfter:y=>`${y} m. gim. ir jaunesni`,
+  days:n=>`Startinis mokestis už ${n} d.`, entry:'Startinis mokestis',
+  roomLine:(r,n,p)=>`Apgyvendinimas: ${r.toLowerCase()}, ${n} n. × ${p} €`,
+  recv:'Gavėjas', iban:'Sąskaitos nr.', amount:'Suma', purpose:'Mokėjimo paskirtis',
+  purposeShort:(no,n)=>`Startinis mokestis pagal sąskaitą ${no}, žaidėjų: ${n}`,
+  p_title:'IŠANKSTINĖ SĄSKAITA', p_no:'Serija ir nr.', p_date:'Data', p_seller:'Pardavėjas', p_payer:'Mokėtojas',
+  p_code:'Įm. kodas', p_addr:'Adresas', p_tel:'Tel.', p_players:'Žaidėjai', p_item:'Paslauga', p_sum:'Suma, EUR',
+  p_total:'Iš viso mokėti, EUR', p_pay:'Mokėjimo duomenys', p_bank:'Gavėjo sąskaita', p_purpose:'Mokėjimo paskirtis',
+  p_note:'Registracija patvirtinama gavus apmokėjimą. Startinis mokestis grąžinamas tik pranešus apie nedalyvavimą iki registracijos pabaigos.',
+  p_qr:'Nuskenuokite banko programėle' },
+ en:{ sub:'International table tennis tournament · Registration', player:n=>`Player ${n}`, remove:'Remove',
+  add:'+ Add player', name:'First and last name', e_name:'Please enter the name.',
+  h_days:'Days and groups', days_hint:'One player can play in only one group per day.',
+  e_days:'Choose at least one day and a group for each chosen day.', ittf:'ITTF ID number',
+  ittf_hint:'Mandatory in U13 and U15 groups. Contact gajacup@stalotenisas.lt.',
+  e_ittf:'Please enter the ITTF ID (digits only).',
+  h_room:'Accommodation', room:'Room', nights:'Number of nights',
+  r_none:'Not needed', r_double:'Double room', r_single:'Single room',
+  room_hint:h=>`Hotel ${h}, breakfast included. Price per person per night. Transport information will be provided after registration.`,
+  perNight:'/ night',
+  h_payer:'Payer', payer_hint:'Who pays for the registration: parent, coach, club or the player. These details will appear on the invoice.',
+  payName:'Name or company (club) name', e_pay:'Please enter the payer.',
+  payCode:'Company code (if a company pays)', payEmail:'E-mail', payAddr:'Address',
+  h_sum:'To pay', total:'Total', late:'Late registration fee applies.',
+  b_pdf:'Download invoice (PDF)', b_pay:'Pay',
+  h_pay:'Payment by bank transfer', qr_hint:'Scan with your banking app', copy:'Copy', copied:'Copied',
+  pay_note:'Registration is confirmed after payment. Players are then added to the list at rezultatai.stalotenisas.lt.',
+  foot:'Questions and invoices:',
+  fri:'Friday', sat:'Saturday', sun:'Sunday', B:'boys', G:'girls', W:'women', M:'men',
+  bornAfter:y=>`born ${y} or later`,
+  days:n=>`Entry fee for ${n} days`, entry:'Entry fee',
+  roomLine:(r,n,p)=>`Accommodation: ${r.toLowerCase()}, ${n} nights × ${p} €`,
+  recv:'Beneficiary', iban:'IBAN', amount:'Amount', purpose:'Payment reference',
+  purposeShort:(no,n)=>`Entry fee, invoice ${no}, players: ${n}`,
+  p_title:'PRO FORMA INVOICE', p_no:'Invoice no.', p_date:'Date', p_seller:'Seller', p_payer:'Payer',
+  p_code:'Company code', p_addr:'Address', p_tel:'Phone', p_players:'Players', p_item:'Service', p_sum:'Amount, EUR',
+  p_total:'Total to pay, EUR', p_pay:'Payment details', p_bank:'Beneficiary IBAN', p_purpose:'Payment reference',
+  p_note:'Registration is confirmed after payment. Entry fee is refundable only if cancelled before the registration deadline.',
+  p_qr:'Scan with your banking app' }
+};
+
+let L = 'lt', invNo = null, seq = 0;
+const players = [];
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const eur = n => n.toFixed(2).replace('.', ',') + ' €';
+const isLate = () => !!CONFIG.lateAfter && new Date() > new Date(CONFIG.lateAfter);
+const fmtIban = s => s.replace(/(.{4})/g, '$1 ').trim();
+const newPlayer = () => ({ id: ++seq, name: '', ittf: '', on: {}, grp: {}, room: 'none', nights: 1 });
+
+function groupLabel(g) { const t = T[L]; return g.age === 'OPEN' ? `OPEN ${t[g.sex]}` : `${g.age} ${t[g.sex]} (${t.bornAfter(g.born)})`; }
+function dayLabel(d) { return T[L][d.id] + (CONFIG.dates[d.id] ? ', ' + CONFIG.dates[d.id] : ''); }
+function picks(p) { return DAYS.filter(d => p.on[d.id] && p.grp[d.id]).map(d => ({ day: d, g: d.groups.find(x => x.id === p.grp[d.id]) })); }
+function needIttf(p) { return picks(p).some(x => x.g.ittf); }
+function roomName(r) { return T[L]['r_' + r]; }
+
+function calcPlayer(p) {
+  const list = picks(p), n = list.length, late = isLate();
+  const entry = !n ? 0 : n === 1 ? (late ? list[0].g.late : list[0].g.fee) : (late ? CONFIG.bundleLate : CONFIG.bundle)[n];
+  const roomPrice = p.room === 'none' ? 0 : CONFIG.rooms[p.room];
+  return { list, n, entry, roomPrice, room: roomPrice * (p.room === 'none' ? 0 : p.nights) };
+}
+function grandTotal() { return players.reduce((s, p) => { const c = calcPlayer(p); return s + c.entry + c.room; }, 0); }
+
+function renderPlayers() {
+  const t = T[L], box = $('#players'), late = isLate();
+  box.innerHTML = players.map((p, i) => `
+  <section class="card" data-p="${p.id}">
+    <div class="phead"><h2>${t.player(i + 1)}</h2>${players.length > 1 ? `<button class="rm" type="button" data-act="rm">${t.remove}</button>` : ''}</div>
+    <div class="field">
+      <label class="f">${t.name}</label>
+      <input type="text" data-k="name" value="${esc(p.name)}" autocomplete="off">
+      <p class="err" data-e="name">${t.e_name}</p>
+    </div>
+    <h3>${t.h_days}</h3>
+    <p class="hint" style="margin:-4px 0 10px">${t.days_hint}</p>
+    ${DAYS.map(d => `
+      <div class="day ${p.on[d.id] ? 'on' : ''}">
+        <label class="dayhead"><input type="checkbox" data-day="${d.id}" ${p.on[d.id] ? 'checked' : ''}> ${dayLabel(d)}</label>
+        <div class="groups">${d.groups.map(g => `
+          <label class="opt"><input type="radio" name="g${p.id}_${d.id}" data-grp="${d.id}" value="${g.id}" ${p.grp[d.id] === g.id ? 'checked' : ''}>
+          <span>${groupLabel(g)}${g.ittf ? '<span class="tag">ITTF ID</span>' : ''} <span class="price">· ${eur(late ? g.late : g.fee)}</span></span></label>`).join('')}
+        </div>
+      </div>`).join('')}
+    <p class="err" data-e="days">${t.e_days}</p>
+    <div class="field" style="margin-top:14px;${needIttf(p) ? '' : 'display:none'}" data-box="ittf">
+      <label class="f">${t.ittf}</label>
+      <input type="text" data-k="ittf" inputmode="numeric" value="${esc(p.ittf)}">
+      <p class="hint">${t.ittf_hint}</p>
+      <p class="err" data-e="ittf">${t.e_ittf}</p>
+    </div>
+    <h3>${t.h_room}</h3>
+    <div class="two">
+      <div class="field"><label class="f">${t.room}</label>
+        <select data-k="room">${['none','double','single'].map(r => `<option value="${r}" ${p.room === r ? 'selected' : ''}>${roomName(r)}${r === 'none' ? '' : ' · ' + CONFIG.rooms[r] + ' € ' + t.perNight}</option>`).join('')}</select></div>
+      <div class="field" style="${p.room === 'none' ? 'display:none' : ''}"><label class="f">${t.nights}</label>
+        <select data-k="nights">${Array.from({ length: CONFIG.maxNights }, (_, k) => k + 1).map(n => `<option ${p.nights === n ? 'selected' : ''}>${n}</option>`).join('')}</select></div>
+    </div>
+    <p class="hint" style="margin-top:-6px">${t.room_hint(CONFIG.hotel)}</p>
+  </section>`).join('');
+}
+
+function renderSummary() {
+  const t = T[L];
+  $('#lines').innerHTML = players.map((p, i) => {
+    const c = calcPlayer(p);
+    let h = `<div class="sum who"><span>${esc(p.name.trim() || t.player(i + 1))}</span></div>`;
+    h += c.list.map(x => `<div class="sum"><span>${dayLabel(x.day)}: ${groupLabel(x.g)}</span><span>${c.n === 1 ? eur(c.entry) : ''}</span></div>`).join('');
+    if (c.n > 1) h += `<div class="sum"><span>${t.days(c.n)}</span><span>${eur(c.entry)}</span></div>`;
+    if (c.room) h += `<div class="sum"><span>${t.roomLine(roomName(p.room), p.nights, c.roomPrice)}</span><span>${eur(c.room)}</span></div>`;
+    return h;
+  }).join('');
+  $('#total').textContent = eur(grandTotal());
+  $('#lateNote').style.display = isLate() ? 'block' : 'none';
+}
+
+function changed(full) {
+  invNo = null; $('#pay').style.display = 'none';
+  if (full) renderPlayers();
+  renderSummary();
+}
+
+$('#players').addEventListener('input', e => {
+  const card = e.target.closest('[data-p]'); if (!card) return;
+  const p = players.find(x => x.id == card.dataset.p), k = e.target.dataset.k;
+  if (k === 'name' || k === 'ittf') { p[k] = e.target.value; changed(false); }
+});
+$('#players').addEventListener('change', e => {
+  const card = e.target.closest('[data-p]'); if (!card) return;
+  const p = players.find(x => x.id == card.dataset.p), el = e.target;
+  if (el.dataset.day) p.on[el.dataset.day] = el.checked;
+  else if (el.dataset.grp) p.grp[el.dataset.grp] = el.value;
+  else if (el.dataset.k === 'room') p.room = el.value;
+  else if (el.dataset.k === 'nights') p.nights = +el.value;
+  else return;
+  changed(true);
+});
+$('#players').addEventListener('click', e => {
+  if (e.target.dataset.act !== 'rm') return;
+  const id = e.target.closest('[data-p]').dataset.p;
+  players.splice(players.findIndex(x => x.id == id), 1); changed(true);
+});
+$('#bAdd').onclick = () => {
+  players.push(newPlayer()); changed(true);
+  const cards = document.querySelectorAll('[data-p]'); const last = cards[cards.length - 1];
+  last.scrollIntoView({ behavior: 'smooth', block: 'start' }); last.querySelector('input').focus({ preventScroll: true });
+};
+['payName','payCode','payEmail','payAddr'].forEach(id => $('#' + id).addEventListener('input', () => { invNo = null; $('#pay').style.display = 'none'; }));
+
+function validate() {
+  document.querySelectorAll('.err').forEach(e => e.classList.remove('show'));
+  let first = null;
+  const bad = el => { el.classList.add('show'); if (!first) first = el; };
+  players.forEach(p => {
+    const card = document.querySelector(`[data-p="${p.id}"]`);
+    if (p.name.trim().split(/\s+/).length < 2) bad(card.querySelector('[data-e=name]'));
+    const on = DAYS.filter(d => p.on[d.id]);
+    if (!on.length || on.some(d => !p.grp[d.id])) bad(card.querySelector('[data-e=days]'));
+    if (needIttf(p) && !/^\d{3,10}$/.test(p.ittf.trim())) bad(card.querySelector('[data-e=ittf]'));
+  });
+  if (!$('#payName').value.trim()) bad($('#e_pay'));
+  if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  return !first;
+}
+function ensureInv() {
+  if (!invNo) { const d = new Date(); invNo = `GC27-${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${Math.random().toString(36).slice(2,6).toUpperCase()}`; }
+  return invNo;
+}
+function purpose() {
+  const code = g => g.age === 'OPEN' ? 'OPEN ' + g.sex : g.age + g.sex;
+  const full = `Startinis mokestis: ${players.map(p => `${p.name.trim()} ${picks(p).map(x => code(x.g)).join('+')}`).join('; ')}, ${invNo}`;
+  return full.length <= 140 ? full : T.lt.purposeShort(invNo, players.length);
+}
+function epc() { return ['BCD','002','1','SCT','',CONFIG.seller.name,CONFIG.seller.iban,'EUR'+grandTotal().toFixed(2),'','',purpose()].join('\n'); }
+
+function makePdf() {
+  if (!validate()) return;
+  ensureInv();
+  const t = T[L], s = CONFIG.seller, today = new Date().toISOString().slice(0,10), G = '#1d3a22', total = grandTotal();
+  const num = n => L === 'lt' ? n.toFixed(2).replace('.', ',') : n.toFixed(2);
+  const body = [[{text:t.p_item,style:'th'},{text:t.p_sum,style:'th',alignment:'right'}]];
+  players.forEach(p => {
+    const c = calcPlayer(p);
+    body.push([{text:`${p.name.trim()}${needIttf(p) ? '  ·  ITTF ID ' + p.ittf.trim() : ''}`,bold:true,color:G,colSpan:2,fillColor:'#f3f6f3'},'']);
+    c.list.forEach(x => body.push([`${t.entry}: ${dayLabel(x.day)}, ${groupLabel(x.g)}`,{text:c.n === 1 ? num(c.entry) : '',alignment:'right'}]));
+    if (c.n > 1) body.push([t.days(c.n),{text:num(c.entry),alignment:'right'}]);
+    if (c.room) body.push([`${t.roomLine(roomName(p.room), p.nights, c.roomPrice)} (${CONFIG.hotel})`,{text:num(c.room),alignment:'right'}]);
+  });
+  body.push([{text:t.p_total,bold:true},{text:num(total),bold:true,alignment:'right'}]);
+  const payer = [{text:t.p_payer,style:'lbl'},{text:$('#payName').value.trim(),bold:true}];
+  if ($('#payCode').value.trim()) payer.push(`${t.p_code}: ${$('#payCode').value.trim()}`);
+  if ($('#payAddr').value.trim()) payer.push(`${t.p_addr}: ${$('#payAddr').value.trim()}`);
+  if ($('#payEmail').value.trim()) payer.push($('#payEmail').value.trim());
+  const doc = {
+    pageSize:'A4', pageMargins:[48,48,48,56],
+    defaultStyle:{font:'Roboto',fontSize:10,lineHeight:1.25},
+    content:[
+      {canvas:[{type:'rect',x:0,y:0,w:499,h:6,color:G}]},
+      {columns:[{text:`GAJA CUP ${CONFIG.year}`,fontSize:20,bold:true,color:G},{text:t.p_title,fontSize:14,bold:true,alignment:'right',margin:[0,5,0,0]}],margin:[0,14,0,4]},
+      {columns:[{text:CONFIG.venue,color:'#5d665e'},{text:`${t.p_no}: ${invNo}\n${t.p_date}: ${today}`,alignment:'right'}],margin:[0,0,0,22]},
+      {columns:[
+        [{text:t.p_seller,style:'lbl'},{text:s.name,bold:true},`${t.p_code}: ${s.code}`,`${t.p_addr}: ${s.address}`,`${t.p_tel}: ${s.phone}`,s.email],
+        payer
+      ],columnGap:24,margin:[0,0,0,20]},
+      {text:t.p_players,style:'lbl'},
+      {table:{headerRows:1,widths:['*',80],body},layout:{hLineColor:()=>'#d6ddd6',vLineWidth:()=>0,paddingTop:()=>3,paddingBottom:()=>3,fillColor:(i)=>i===0?'#e8efe8':null}},
+      {columns:[
+        [{text:t.p_pay,style:'lbl',margin:[0,24,0,4]},
+         {table:{widths:[110,'*'],body:[[t.recv,s.name],[t.p_bank,{text:fmtIban(s.iban),bold:true}],[t.p_total,{text:eur(total),bold:true}],[t.p_purpose,purpose()]]},layout:'noBorders'}],
+        {stack:[{qr:epc(),fit:110,eccLevel:'M',margin:[0,24,0,4]},{text:t.p_qr,fontSize:8,color:'#5d665e'}],width:120}
+      ],columnGap:16,unbreakable:true},
+      {text:t.p_note,fontSize:9,color:'#5d665e',margin:[0,22,0,0]}
+    ],
+    styles:{th:{bold:true,color:G},lbl:{fontSize:8,bold:true,color:'#5d665e',characterSpacing:1,margin:[0,0,0,4]}}
+  };
+  const fname = `GAJA-CUP-${CONFIG.year}-${invNo}.pdf`, pdf = pdfMake.createPdf(doc);
+  if (dl) pdf.getBlob(blob => dl.save({ filename: fname, data: blob }).catch(() => {}));
+  else pdf.download(fname);
+}
+let dl = null;
+if (window.claude && claude.use) claude.use('downloads').then(x => { dl = x; }).catch(() => {});
+
+function pay() {
+  if (!validate()) return;
+  ensureInv();
+  if (CONFIG.payUrl) { window.open(CONFIG.payUrl, '_blank'); return; }
+  const t = T[L], total = grandTotal();
+  const rows = [[t.recv, CONFIG.seller.name], [t.iban, fmtIban(CONFIG.seller.iban), CONFIG.seller.iban], [t.amount, eur(total), total.toFixed(2)], [t.purpose, purpose()]];
+  $('#payRows').innerHTML = rows.map(r => `<div class="row"><span>${r[0]}</span><b>${esc(r[1])}</b><button class="copy" data-v="${esc(r[2] || r[1])}">${t.copy}</button></div>`).join('');
+  $('#payRows').querySelectorAll('.copy').forEach(b => b.onclick = () => { try { navigator.clipboard.writeText(b.dataset.v).catch(() => {}); } catch (e) {} b.textContent = t.copied; setTimeout(() => b.textContent = t.copy, 1500); });
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'];
+  const q = qrcode(0, 'M'); q.addData(epc()); q.make();
+  $('#qr').innerHTML = q.createSvgTag({ cellSize: 4, margin: 0 });
+  $('#pay').style.display = 'block'; $('#pay').scrollIntoView({ behavior: 'smooth' });
+}
+
+function setLang(l) {
+  L = l; document.documentElement.lang = l;
+  document.querySelectorAll('.lang button').forEach(b => b.classList.toggle('on', b.dataset.l === l));
+  document.querySelectorAll('[data-t]').forEach(e => { const v = T[l][e.dataset.t]; if (typeof v === 'string') e.textContent = v; });
+  changed(true);
+}
+document.querySelectorAll('.lang button').forEach(b => b.onclick = () => setLang(b.dataset.l));
+$('#bPdf').onclick = makePdf; $('#bPay').onclick = pay;
+players.push(newPlayer());
+setLang(navigator.language && !navigator.language.startsWith('lt') ? 'en' : 'lt');
+</script>
+</body>
+</html>
